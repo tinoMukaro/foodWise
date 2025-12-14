@@ -16,6 +16,7 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
     "dotenv": "^17.2.3",
+    "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3"

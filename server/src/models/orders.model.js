@@ -1,13 +1,27 @@
-import { integer } from "drizzle-orm/gel-core";
-import { serial, varchar } from "drizzle-orm/mysql-core";
-import { pgTable } from "drizzle-orm/pg-core";
-import { deals } from "./deals.model";
+import {
+  pgTable,
+  serial,
+  integer,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core";
+import { deals } from "./deals.model.js";
+import { orderStatusEnum, paymentMethodEnum } from "./enums";
 
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
 
-export const orders = pgTable('orders',{
-    id: serial('id').primaryKey(),
-    deal_id: integer('deal_id').references(()=>deals.id, {onDelete: 'cascade'}),
-    //status: varchar('status', {length:255}).default('pending').notNull().check status in pending, collected cancelled
-    payment_Method: varchar('payment_method', {length: 20}).default('cash'),
-    created_at: timestamp('created_at').defaultNow().notNull(),cr
-})
+  deal_id: integer("deal_id")
+    .references(() => deals.id, { onDelete: "cascade" })
+    .notNull(),
+
+  status: orderStatusEnum("status")
+    .default("pending")
+    .notNull(),
+
+  payment_method: paymentMethodEnum("payment_method")
+    .default("cash")
+    .notNull(),
+
+  created_at: timestamp("created_at").defaultNow().notNull(),
+});
