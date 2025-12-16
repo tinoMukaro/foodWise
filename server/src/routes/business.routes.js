@@ -1,9 +1,11 @@
 import { Router } from "express";
+import { fetchBusinessById, registerBusiness} from '../controllers/business.controller.js'
+import { businessOnly } from "../middleware/auth.js";
 
 const businessRoutes = Router()
 
-businessRoutes.get("/",()=>{"you reached endpoint"}) //get Business
-businessRoutes.post("/",()=>{"you reached endpoint"})//create business
+businessRoutes.get("/",businessOnly,fetchBusinessById ) //get Business
+businessRoutes.post("/" ,businessOnly,registerBusiness )//create business
 businessRoutes.put("/",()=>{"you reached endpoint"})//update business
 
 businessRoutes.get("/deals",()=>{"you reached endpoint"})//get deals

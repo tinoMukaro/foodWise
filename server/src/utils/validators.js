@@ -12,3 +12,9 @@ export const signInSchema = z.object({
   email: z.string().email().toLowerCase().trim(),
   password: z.string().min(1)
 });
+
+export const registerBusinessSchema = z.object({
+   business_name: z.string().trim().min(2).max(255),
+   location: z.string().trim().min(2).max(255),
+   opening_hours: z.string().trim().min(2).max(255),
+})
