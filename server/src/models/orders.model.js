@@ -3,7 +3,7 @@ import {
   serial,
   integer,
   timestamp,
-  varchar,
+  
 } from "drizzle-orm/pg-core";
 import { deals } from "./deals.model.js";
 import { orderStatusEnum, paymentMethodEnum } from "./enums";

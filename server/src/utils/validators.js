@@ -18,3 +18,12 @@ export const registerBusinessSchema = z.object({
    location: z.string().trim().min(2).max(255),
    opening_hours: z.string().trim().min(2).max(255),
 })
+
+export const makeDealSchema = z.object({
+  title: z.string().trim().min(2).max(255),
+  description: z.string().trim().min(2).max(1000),
+  price: z.number().positive('Price must be greater than 0'),
+  quantity: z.number().int('Quantity must be an integer').min(1, 'Quantity must be at least 1'),
+  image_url: z.string().url('Invalid image URL').optional(),
+  expires_at: z.string().refine((date) => new Date(date).getTime() > Date.now(),'Expiry date must be in the future'),
+});

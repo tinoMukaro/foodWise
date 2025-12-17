@@ -6,11 +6,11 @@ const businessRoutes = Router()
 
 businessRoutes.get("/",businessOnly,fetchBusinessById ) //get Business
 businessRoutes.post("/" ,businessOnly,registerBusiness )//create business
-businessRoutes.put("/",()=>{"you reached endpoint"})//update business
+businessRoutes.put("/",businessOnly)//update business
 
-businessRoutes.get("/deals",()=>{"you reached endpoint"})//get deals
-businessRoutes.put("/deals",()=>{"you reached endpoint"})//create deals
+businessRoutes.get("/deals",businessOnly)//get deals
+businessRoutes.put("/deals",businessOnly)//create deals
 
-businessRoutes.get("/orders",()=>{"you reached endpoint"})//get incoming orders
+businessRoutes.get("/orders",businessOnly)//get incoming orders
 
 export default businessRoutes;
