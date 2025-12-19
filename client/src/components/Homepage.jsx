@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag, Shield, MapPin, Star, ArrowRight } from 'lucide-react';
 
@@ -22,8 +21,8 @@ const Homepage = () => {
                     <Link to="/signup" className="text-gray-700 hover:text-[#2E7D32] font-medium">Sign Up</Link>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <Link to="/login" className="text-gray-700 hover:text-[#2E7D32] font-medium">Log In</Link>
-                    <Link to="/signup" className="bg-[#FF9800] text-white px-6 py-2 rounded-full font-semibold hover:bg-orange-600 transition duration-300 shadow-md">
+                    <Link to="/auth" className="text-gray-700 hover:text-[#2E7D32] font-medium">Log In</Link>
+                    <Link to="/auth" className="bg-[#FF9800] text-white px-6 py-2 rounded-full font-semibold hover:bg-orange-600 transition duration-300 shadow-md">
                         Get Started
                     </Link>
                 </div>
@@ -34,14 +33,14 @@ const Homepage = () => {
                 <div className="md:w-1/2 mb-12 md:mb-0">
                     <h1 className="text-4xl md:text-6xl font-bold text-[#333333] leading-tight">
                         Fight Food Waste,<br />
-                        <span className="text-[#2E7D32]">Save Money</span>,
-                        <span className="text-[#FF9800]"> Taste Zimbabwe</span>.
+                        <span className="text-[#2E7D32]">Save Money</span>.
+                        
                     </h1>
                     <p className="text-xl text-gray-600 my-8">
                         Discover delicious surplus food from top restaurants, bakeries, and supermarkets in your city at a fraction of the price. Good for your wallet, great for the planet.
                     </p>
                     <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
-                        <Link to="/signup" className="bg-[#2E7D32] text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg flex items-center justify-center">
+                        <Link to="/auth" className="bg-[#2E7D32] text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg flex items-center justify-center">
                             Explore Magic Bags <ArrowRight className="ml-2" />
                         </Link>
                         <a href="#how" className="border-2 border-[#2E7D32] text-[#2E7D32] px-8 py-4 rounded-full text-lg font-semibold hover:bg-green-50 transition duration-300 text-center">
@@ -58,14 +57,14 @@ const Homepage = () => {
                                 className="w-full h-full object-cover"
                             />
                         </div>
-                        {/* Floating Stats Card */}
+                        {/* Floating Stats Card
                         <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl">
                             <div className="text-3xl font-bold text-[#2E7D32]">5000+</div>
                             <div className="text-gray-500">Meals Saved</div>
                             <div className="flex mt-2">
                                 {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />)}
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
