@@ -8,7 +8,7 @@ export const hashPassword = async password => {
   try {
     return await bcrypt.hash(password, 10);
   } catch (e) {
-    consoleerror(`Error hashing the password: ${e}`);
+    console.error(`Error hashing the password: ${e}`);
     throw new Error('Error hashing');
   }
 };
@@ -54,7 +54,9 @@ export const createUser = async({ name, email, password, role = 'user' })=>{
       });
 
     console.log(`User ${newUser.email} created successfully`);
+
     return newUser;
+    
   } catch (e) {
     console.error(`Error creating the user: ${e}`);
     throw e;

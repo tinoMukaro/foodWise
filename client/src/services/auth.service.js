@@ -10,12 +10,12 @@ const API = axios.create({
 });
 
 export const signup = async (payload) => {
-  const res = await API.post("/auth/sign-up", payload);
+  const res = await API.post("/api/user/sign-up", payload);
   return res.data;
 };
 
 export const signin = async (payload) => {
-  const res = await API.post("/auth/sign-in", payload);
+  const res = await API.post("/api/user/sign-in", payload);
   return res.data;
 };
 
