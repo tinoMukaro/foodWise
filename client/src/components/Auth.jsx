@@ -1,13 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { signin, signup } from "../services/auth.service.js";
 
 export default function AuthPage() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState("signin"); // signin | signup
   const [form, setForm] = useState({
   name: "",
   email: "",
   password: "",
-  phone: "",
   role: "user", 
 });
   const [loading, setLoading] = useState(false);
@@ -17,33 +18,37 @@ export default function AuthPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
-    try {
-      if (mode === "signup") {
-        await signup({
-            name: form.name,
-            email: form.email,
-            password: form.password,
-            phone: form.phone,
-            role: form.role,
-        });
-      } else {
-        await signin({
-          email: form.email,
-          password: form.password,
-        });
-        
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+  try {
+    if (mode === "signup") {
+      await signup({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        role: form.role,
+      });
+
+      // after successful signup
+      navigate("/userDashboard");
+    } else {
+      await signin({
+        email: form.email,
+        password: form.password,
+      });
+
+      // after successful signin
+      navigate("/userDashboard");
     }
-  };
+  } catch (err) {
+    setError(err.response?.data?.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
@@ -63,7 +68,6 @@ export default function AuthPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === "signup" && (
-            <>
             <input
               type="text"
               name="name"
@@ -73,17 +77,6 @@ export default function AuthPage() {
               required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
             />
-
-             <input
-            type="tel"
-            name="phone"
-            placeholder="Phone number"
-            value={form.phone}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
-           />
-           </>
           )}
 
           <input
