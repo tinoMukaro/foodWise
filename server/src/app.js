@@ -28,5 +28,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/user', userRoutes);
+app.use('/api/business', businessRouter);
 
 export default app;
