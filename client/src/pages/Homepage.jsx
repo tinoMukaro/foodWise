@@ -102,7 +102,7 @@ const Homepage = () => {
                             </p>
                         </div>
                         <Link 
-                            to="/business/signup"
+                            to="/business"
                             className="bg-white text-[#2E7D32] px-10 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition duration-300 shadow-lg"
                         >
                             List Your Business
