@@ -2,7 +2,7 @@ import Homepage from "./pages/Homepage.jsx"
 import { Routes, Route } from 'react-router-dom'
 import AuthPage from "./components/Auth.jsx"
 import UserDashboard from "./pages/UserDashboard.jsx"
-import BusinessAuthDashboard from "./pages/BusinessAuthDashboard.jsx"
+import BusinessAuthDashboard from "./components/BusinessAuth.jsx"
 
 function App() {
   
