@@ -2,6 +2,7 @@ import { business } from '../models/business.model.js';
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import {db }  from '../config/database.js';
+import { types } from '@neondatabase/serverless';
 
 
 export const hashPassword = async password => {
@@ -22,7 +23,7 @@ export const comparePassword = async (password, hashedPassword) => {
   }
 };
 
-export const createBusiness = async({ name, email, password, phone, phone2, location, openingHours, description })=>{
+export const createBusiness = async({ name, type, email, password, phone, phone2, location, openingHours, description })=>{
       try {
     const existingBus = await db
       .select()
@@ -38,7 +39,8 @@ export const createBusiness = async({ name, email, password, phone, phone2, loca
     const [newBusiness] = await db
       .insert(business)
       .values({ 
-        name, 
+        name,
+        type, 
         email, 
         password: password_hash, 
         phone,
@@ -50,6 +52,7 @@ export const createBusiness = async({ name, email, password, phone, phone2, loca
       .returning({
         id: business.id,
         name: business.name,
+        type: business.type,
         email: business.email,
         phone: business.phone,
         phone2: business.phone2,
@@ -97,6 +100,7 @@ export const authenticateBusiness = async ({ email, password }) => {
     return {
       id: existingBus.id,
       name: existingBus.name,
+      type: existingBus.type,
       email: existingBus.email,
       phone: existingBus.phone,
       phone2: existingBus.phone2,

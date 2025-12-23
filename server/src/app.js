@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 import userRoutes from './routes/user.Routes.js';
+import businessRouter from './routes/business.Routes.js';
 
 
 const app = express();

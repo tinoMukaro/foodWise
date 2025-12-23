@@ -16,9 +16,9 @@ export const signup = async (req, res, next) => {
       });
     }
 
-    const { name, email, password, phone, phone2, location, openingHours, description } = validationResult.data;
+    const { name, type, email, password, phone, phone2, location, openingHours, description } = validationResult.data;
 
-    const Business = await createBusiness({ name, email, password, phone, phone2, location, openingHours, description });
+    const Business = await createBusiness({ name, type, email, password, phone, phone2, location, openingHours, description });
 
     const token = jwttoken.sign({
       id: Business.id,
