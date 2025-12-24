@@ -31,3 +31,25 @@ export const createDealSchema = z
       path: ["dealPrice"],
     }
   );
+
+
+export const updateDealSchema = z.object({
+  title: z.string().min(1).max(150).optional(),
+  description: z.string().min(1).optional(),
+  originalPrice: z.string().regex(/^\d+(\.\d{1,2})?$/).optional(),
+  dealPrice: z.string().regex(/^\d+(\.\d{1,2})?$/).optional(),
+  quantityTotal: z.number().int().positive().optional(),
+  quantityLeft: z.number().int().min(0).optional(),
+  expiresAt: z.string().datetime().optional(),
+  pickupLocation: z.string().min(1).max(200).optional(),
+  imageUrl: z.string().url().optional().nullable(),
+  status: z.enum(["active", "inactive", "sold_out", "expired", "deleted"]).optional(),
+});
+
+export const statusSchema = z.object({
+  status: z.enum(["active", "inactive", "sold_out", "expired", "deleted"]),
+});
+
+
+
+  

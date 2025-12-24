@@ -35,7 +35,7 @@ export const deals = pgTable("deals", {
 
   pickupLocation: varchar("pickup_location", { length: 200 }).notNull(),
 
-  status: varchar("status", { length: 20 }).default("active").notNull(),
+  status: varchar("status", { length: 20 }).default("active"),
 
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
