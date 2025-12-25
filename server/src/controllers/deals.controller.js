@@ -13,7 +13,7 @@ import {
 } from "../validations/deals.validation.js";
 import { formatValidationError } from "../utils/format.js";
 
-export const create_deal = async (req, res, next) => {
+export const create_deal = async (req, res) => {
   try {
     const validationResult = createDealSchema.safeParse(req.body);
     
@@ -63,7 +63,7 @@ export const create_deal = async (req, res, next) => {
   }
 };
 
-export const get_all_deals = async (req, res, next) => {
+export const get_all_deals = async (req, res) => {
   try {
     const { businessId, status, page = 1, limit = 20 } = req.query;
     const offset = (page - 1) * limit;
@@ -95,7 +95,7 @@ export const get_all_deals = async (req, res, next) => {
   }
 };
 
-export const get_deal_by_id = async (req, res, next) => {
+export const get_deal_by_id = async (req, res) => {
   try {
     const { id } = req.params;
     const deal = await getDealById(parseInt(id));
@@ -135,7 +135,7 @@ export const update_deal = async (req, res, next) => {
     
     const updateData = validationResult.data;
     
-    // Prevent updating certain fields directly
+ 
     delete updateData.id;
     delete updateData.businessId;
     delete updateData.createdAt;
