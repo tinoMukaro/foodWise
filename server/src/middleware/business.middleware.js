@@ -77,3 +77,29 @@ export const authenticateBusiness = async (req, res, next) => {
     });
   }
 };
+
+
+export const businessAuth = (req, res, next) => {
+  
+
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({ message: "No token" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+   
+
+    if (decoded.role !== "business") {
+      return res.status(403).json({ message: "Not business" });
+    }
+
+    req.business = decoded;
+    next();
+  } catch (err) {
+    console.error("JWT error:", err.message);
+    return res.status(401).json({ message: "Invalid token" });
+  }
+};

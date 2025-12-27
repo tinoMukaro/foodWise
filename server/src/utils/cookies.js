@@ -1,10 +1,16 @@
+import 'dotenv/config';
+
 export const cookies = {
-  getOptions: () => ({
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'none',
-    maxAge: 15 * 60 * 1000,
-  }),
+  getOptions: () => {
+    const isProd = process.env.NODE_ENV === "production";
+
+    return {
+      httpOnly: true,
+      secure: isProd,              
+      sameSite: isProd ? "none" : "lax",
+      maxAge: 15 * 60 * 1000,
+    };
+  },
 
   set: (res, name, value, options = {}) => {
     res.cookie(name, value, { ...cookies.getOptions(), ...options });
@@ -14,7 +20,5 @@ export const cookies = {
     res.clearCookie(name, { ...cookies.getOptions(), ...options });
   },
 
-  get: (req, name) => {
-    return req.cookies[name];
-  },
+  get: (req, name) => req.cookies[name],
 };
