@@ -1,6 +1,7 @@
 import { LayoutGrid, Package, ClipboardList, LogOut, Search, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getMe } from "../services/business.service.js";
+import { Link } from "react-router-dom";
 
 export default function BusinessDashboard() {
 
@@ -30,7 +31,10 @@ export default function BusinessDashboard() {
 
         <nav className="flex-1 px-4 space-y-2">
           <NavItem icon={<LayoutGrid size={18} />} label="Dashboard" active />
-          <NavItem icon={<Package size={18} />} label="Deals" />
+          <Link to="/createDeal">
+             <NavItem icon={<Package size={18} />} label="Create Deals" />
+          </Link>
+          
           <NavItem icon={<ClipboardList size={18} />} label="Orders" />
         </nav>
 
