@@ -1,9 +1,24 @@
 import { LayoutGrid, Package, ClipboardList, LogOut, Search, User } from "lucide-react";
-// import jwtDecode from "jwt-decode"; // later
+import { useEffect, useState } from "react";
+import { getMe } from "../services/business.service.js";
 
 export default function BusinessDashboard() {
-  // 🔐 later replace with decoded token
-  const businessName = "Green Basket Bakery";
+
+   const [business, setBusiness] = useState(null);
+
+  useEffect(() => {
+    getMe()
+      .then(setBusiness)
+      .catch(() => {});
+  }, []);
+
+  if (!business) {
+    return (
+      <div className="min-h-screen bg-[#0F172A] flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex bg-[#0F172A] text-white">
@@ -45,7 +60,7 @@ export default function BusinessDashboard() {
           {/* Business */}
           <div className="flex items-center gap-4">
             <span className="text-sm text-[#94A3B8]">
-              {businessName}
+              {business.name}
             </span>
 
             <div className="w-9 h-9 bg-[#22C55E]/20 text-[#22C55E] rounded-full flex items-center justify-center">
