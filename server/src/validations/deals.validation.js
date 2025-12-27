@@ -22,7 +22,7 @@ export const createDealSchema = z
 
     pickupLocation: z.string().min(3, "Pickup location too short"),
 
-    imageUrl: z.string().url("Invalid image URL").optional(),
+      imageUrl: z.string().url("Invalid image URL").optional().or(z.literal("")),
   })
   .refine(
     (data) => data.dealPrice < data.originalPrice,

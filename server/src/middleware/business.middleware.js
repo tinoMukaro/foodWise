@@ -4,23 +4,20 @@ import { business } from '../models/business.model.js';
 import { eq } from 'drizzle-orm';
 import 'dotenv/config.js';
 
-
 export const authenticateBusiness = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    const token = req.cookies?.token;
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!token) {
       return res.status(401).json({
         success: false,
         message: 'Access denied. No token provided.',
       });
     }
 
-    const token = authHeader.split(' ')[1];
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET );
+  
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-
     if (decoded.role !== 'business') {
       return res.status(403).json({
         success: false,
@@ -33,7 +30,9 @@ export const authenticateBusiness = async (req, res, next) => {
       .select({
         id: business.id,
         email: business.email,
-        businessName: business.businessName,
+        name: business.name,  
+        type: business.type,
+        location: business.location,
       })
       .from(business)
       .where(eq(business.id, decoded.id));
@@ -45,12 +44,14 @@ export const authenticateBusiness = async (req, res, next) => {
       });
     }
 
-
+    
     req.business = {
       business_id: businessData.id,
       id: businessData.id,
       email: businessData.email,
-      businessName: businessData.businessName,
+      name: businessData.name,  
+      type: businessData.type,
+      location: businessData.location,
     };
 
     next();
@@ -77,7 +78,6 @@ export const authenticateBusiness = async (req, res, next) => {
     });
   }
 };
-
 
 export const businessAuth = (req, res, next) => {
   
