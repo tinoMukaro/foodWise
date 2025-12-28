@@ -7,6 +7,7 @@ export const UserAuth = (req, res, next) => {
   
 
   const token = req.cookies.token;
+  
 
   if (!token) {
     return res.status(401).json({ message: "No token" });
@@ -16,11 +17,13 @@ export const UserAuth = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
    
 
-    if (decoded.role !== "User") {
+    if (decoded.role !== "user") {
       return res.status(403).json({ message: "user account required" });
     }
 
     req.user = decoded;
+    
+    
     next();
   } catch (err) {
     console.error("JWT error:", err.message);

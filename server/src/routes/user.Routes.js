@@ -8,7 +8,7 @@ const userRoutes = Router();
 userRoutes.post('/sign-up', signup );
 userRoutes.post('/sign-in', signIn );
 userRoutes.post('/sign-out', signOut );
-businessRouter.get("/me", UserAuth, getMe);
+userRoutes.get("/me", UserAuth, getMe);
 
 
 export default userRoutes;
