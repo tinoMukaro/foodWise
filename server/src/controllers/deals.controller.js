@@ -1,6 +1,6 @@
 import {
   createDeal,
-  getAllDeals,
+  getDealsByBusiness,
   getDealById,
   updateDeal,
   deleteDeal,
@@ -63,34 +63,22 @@ export const create_deal = async (req, res) => {
   }
 };
 
-export const get_all_deals = async (req, res) => {
+export const get_my_deals = async (req, res) => {
   try {
-    const { businessId, status, page = 1, limit = 20 } = req.query;
-    const offset = (page - 1) * limit;
     
-    const filters = {
-      businessId: businessId ? parseInt(businessId) : undefined,
-      status,
-      limit: parseInt(limit),
-      offset,
-    };
-    
-    const deals = await getAllDeals(filters);
-    
+    const businessId = req.business.business_id;
+
+    const deals = await getDealsByBusiness(businessId);
+
     return res.status(200).json({
       success: true,
       data: deals,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        count: deals.length,
-      },
     });
   } catch (error) {
-    console.error("Error getting deals:", error);
+    console.error("Error fetching business deals:", error);
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to get deals",
+      message: "Failed to fetch deals",
     });
   }
 };

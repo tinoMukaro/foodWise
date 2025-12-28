@@ -1,6 +1,6 @@
 import { db } from "../config/database.js";
 import { deals } from "../models/deals.model.js";
-import { eq, and, gt, lte, desc } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 
 export const createDeal = async (dealData) => {
   try {
@@ -43,45 +43,36 @@ export const createDeal = async (dealData) => {
   }
 };
 
-export const getAllDeals = async (filters = {}) => {
+
+export const getDealsByBusiness = async (businessId) => {
   try {
-    const { businessId, status, limit = 50, offset = 0 } = filters;
-    
-    let query = db.select().from(deals);
-    
-    // Apply filters
-    const conditions = [];
-    if (businessId) {
-      conditions.push(eq(deals.businessId, businessId));
-    }
-    if (status) {
-      conditions.push(eq(deals.status, status));
-    }
-    
-    // Only show non-expired active deals by default
-    if (!status) {
-      conditions.push(eq(deals.status, "active"));
-      conditions.push(gt(deals.expiresAt, new Date()));
-    }
-    
-    // Apply all conditions
-    if (conditions.length > 0) {
-      query = query.where(and(...conditions));
-    }
-    
-    // Add ordering and pagination
-    query = query
-      .orderBy(desc(deals.createdAt))
-      .limit(limit)
-      .offset(offset);
-    
-    const allDeals = await query;
-    return allDeals;
+    const businessDeals = await db
+      .select({
+        id: deals.id,
+        businessId: deals.businessId,
+        title: deals.title,
+        description: deals.description,
+        originalPrice: deals.originalPrice,
+        dealPrice: deals.dealPrice,
+        quantityTotal: deals.quantityTotal,
+        quantityLeft: deals.quantityLeft,
+        expiresAt: deals.expiresAt,
+        pickupLocation: deals.pickupLocation,
+        imageUrl: deals.imageUrl,
+        status: deals.status,
+        createdAt: deals.createdAt,
+      })
+      .from(deals)
+      .where(eq(deals.businessId, businessId))
+      .orderBy(desc(deals.createdAt));
+
+    return businessDeals;
   } catch (error) {
-    console.error("Failed to get deals:", error);
+    console.error("Failed to fetch business deals:", error);
     throw error;
   }
 };
+
 
 export const getDealById = async (id) => {
   try {
