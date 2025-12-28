@@ -2,17 +2,38 @@ import Navbar from "../components/Navbar";
 import DealCard from "../components/DealCard";
 import OrdersPreview from "../components/OrderPreview";
 import fakeDeals from "../data/fakeDeals";
+import { getMe } from "../services/auth.service";
+import { useState, useEffect } from "react";
+import { User } from "lucide-react";
 
 export default function Dashboard() {
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+      getMe()
+        .then(setUser)
+        .catch(() => {});
+      }, []);
+
+     if (!user) {
+    return (
+      <div className="min-h-screen bg-[#0F172A] flex items-center justify-center text-white">
+        Loading...
+      </div>
+    );
+  }   
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100">
       <Navbar />
 
       <main className="px-6 py-10 space-y-12 max-w-7xl mx-auto">
         {/* Welcome Section */}
+        <div className="flex items-center gap-4">
+        </div>
         <section className="rounded-2xl bg-white border border-orange-100 p-8 shadow-sm">
           <h2 className="text-3xl font-bold text-orange-600">
-            Welcome to Foodwise 
+            Welcome {user?.name}!
           </h2>
           <p className="text-zinc-600 mt-2 max-w-xl">
             Save food, save money, and enjoy great meals near you — all while fighting food waste.

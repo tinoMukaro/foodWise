@@ -19,4 +19,9 @@ export const signin = async (payload) => {
   return res.data;
 };
 
+export const getMe = async () => {
+  const res = await API.get("/api/user/me");
+  return res.data;
+};
+
 export default API;
