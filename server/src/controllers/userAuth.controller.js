@@ -106,3 +106,12 @@ export const signOut = async (req, res, next) => {
     next(e);
   }
 };
+
+export const getMe = async (req, res) => {
+  res.json({
+    id: req.user.id,
+    name: req.user.name,
+    email: req.user.email,
+  });
+};
+
