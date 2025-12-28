@@ -1,16 +1,22 @@
 import { LayoutGrid, Package, ClipboardList, LogOut, Search, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getMe } from "../services/business.service.js";
+import { getBusinessDeals } from "../services/deal.service.js";
 import { Link } from "react-router-dom";
 
 export default function BusinessDashboard() {
 
    const [business, setBusiness] = useState(null);
+   const [deals, setDeals] = useState([]);
 
   useEffect(() => {
     getMe()
       .then(setBusiness)
       .catch(() => {});
+
+    getBusinessDeals()
+    .then((res) => setDeals(res.data))
+    .catch(() => {});  
   }, []);
 
   if (!business) {
@@ -87,9 +93,16 @@ export default function BusinessDashboard() {
           <section>
             <h2 className="text-lg font-semibold mb-4">Your Deals</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              <DealCard />
-              <DealCard />
-              <DealCard />
+              {deals.length === 0 ? (
+                <p className="text-sm text-[#94A3B8]">
+                  You haven’t created any deals yet.
+                </p>
+              ) : (
+                deals.map((deal) => (
+                  <DealCard key={deal.id} deal={deal} />
+                ))
+              )}
+
             </div>
           </section>
 
@@ -133,15 +146,34 @@ function StatCard({ label, value }) {
   );
 }
 
-function DealCard() {
+function DealCard({ deal }) {
+  const expiresInHours = Math.max(
+    0,
+    Math.floor(
+      (new Date(deal.expiresAt) - new Date()) / (1000 * 60 * 60)
+    )
+  );
+
   return (
     <div className="bg-[#020617] border border-white/10 rounded-xl overflow-hidden">
+      {/* Header strip */}
       <div className="h-28 bg-gradient-to-br from-[#22C55E]/30 to-transparent" />
+
       <div className="p-4 space-y-2">
-        <h3 className="font-semibold">Surprise Grocery Bag</h3>
-        <p className="text-sm text-[#94A3B8]">$6 instead of $15 • 4 left</p>
+        <h3 className="font-semibold">
+          {deal.title}
+        </h3>
+
+        <p className="text-sm text-[#94A3B8]">
+          ${deal.dealPrice} instead of ${deal.originalPrice} •{" "}
+          {deal.quantityLeft}/{deal.quantityTotal} left
+        </p>
+
         <div className="flex justify-between items-center pt-2">
-          <span className="text-xs text-[#94A3B8]">Expires in 2h</span>
+          <span className="text-xs text-[#94A3B8]">
+            Expires in {expiresInHours}h
+          </span>
+
           <button className="text-sm text-red-400 hover:text-red-300">
             Disable
           </button>
