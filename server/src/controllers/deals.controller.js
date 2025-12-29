@@ -5,6 +5,7 @@ import {
   updateDeal,
   deleteDeal,
   updateDealStatus,
+  getAllActiveDeals
 } from "../services/deals.service.js";
 import {
   createDealSchema,
@@ -82,6 +83,33 @@ export const get_my_deals = async (req, res) => {
     });
   }
 };
+
+export const getDealsForUser = async (req, res) => {
+  try {
+    const available_deals = await getAllActiveDeals();
+    
+    
+    if (!available_deals || available_deals.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+        message: "No deals available at the moment"
+      });
+    }
+    
+    return res.status(200).json({
+      success: true,
+      data: available_deals,
+    });
+
+  } catch(error) {
+    console.error("Error fetching deals for user:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch deals",
+    }); 
+  }
+}
 
 export const get_deal_by_id = async (req, res) => {
   try {

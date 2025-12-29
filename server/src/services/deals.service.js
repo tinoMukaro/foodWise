@@ -1,5 +1,6 @@
 import { db } from "../config/database.js";
 import { deals } from "../models/deals.model.js";
+import { business } from "../models/business.model.js";
 import { eq, and, desc } from "drizzle-orm";
 
 export const createDeal = async (dealData) => {
@@ -211,6 +212,37 @@ export const updateDealStatus = async (id, businessId, status) => {
     return updatedDeal;
   } catch (error) {
     console.error(`Failed to update status for deal ${id}:`, error);
+    throw error;
+  }
+};
+
+export const getAllActiveDeals = async () => {
+  try {
+    const activeDeals = await db
+      .select({
+        id: deals.id,
+        businessId: deals.businessId,
+        businessName: business.name,
+        title: deals.title,
+        description: deals.description,
+        originalPrice: deals.originalPrice,
+        dealPrice: deals.dealPrice,
+        quantityTotal: deals.quantityTotal,
+        quantityLeft: deals.quantityLeft,
+        expiresAt: deals.expiresAt,
+        pickupLocation: deals.pickupLocation,
+        imageUrl: deals.imageUrl,
+        status: deals.status,
+        createdAt: deals.createdAt,
+      })
+      .from(deals)
+      .leftJoin(business, eq(deals.businessId, business.id))
+      .where(eq(deals.status, 'active'))
+      .orderBy(desc(deals.createdAt));
+
+    return activeDeals;
+  } catch (error) {
+    console.error("Failed to fetch active deals:", error);
     throw error;
   }
 };
