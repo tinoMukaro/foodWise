@@ -8,5 +8,10 @@ export const createDeal = async (payload) => {
 
 export const getBusinessDeals = async () => {
   const res = await API.get("/api/deals/");
-  return res.data; // { success, data }
+  return res.data; 
 };
+
+export const getDealsForUser = async () => {
+  const res = await API.get("/api/deals/all");
+  return res.data; 
+}

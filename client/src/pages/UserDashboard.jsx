@@ -1,27 +1,61 @@
 import Navbar from "../components/Navbar";
 import DealCard from "../components/DealCard";
 import OrdersPreview from "../components/OrderPreview";
-import fakeDeals from "../data/fakeDeals";
 import { getMe } from "../services/auth.service";
+import { getDealsForUser } from "../services/deal.service";
 import { useState, useEffect } from "react";
-import { User } from "lucide-react";
 
 export default function Dashboard() {
-
   const [user, setUser] = useState(null);
-  useEffect(() => {
-      getMe()
-        .then(setUser)
-        .catch(() => {});
-      }, []);
+  const [deals, setDeals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-     if (!user) {
-    return (
-      <div className="min-h-screen bg-[#0F172A] flex items-center justify-center text-white">
-        Loading...
-      </div>
-    );
-  }   
+  useEffect(() => {
+    // Fetch user data
+    getMe()
+      .then(setUser)
+      .catch(() => {
+        setError("Failed to load user data");
+      });
+
+    // Fetch deals data
+    getDealsForUser()
+      .then((response) => {
+        console.log("Full API Response:", response);
+        
+        // The response has a 'data' property containing the array of deals
+        if (response && response.success && Array.isArray(response.data)) {
+          // Transform API data to match DealCard component structure
+          const formattedDeals = response.data.map(deal => ({
+            id: deal.id,
+            title: deal.title,
+            business: deal.businessName, 
+            location: deal.pickupLocation,
+            price: deal.dealPrice,
+            originalPrice: deal.originalPrice,
+            quantity: deal.quantityLeft,
+            expiresIn: deal.expiresAt,
+            image: deal.imageUrl || "https://via.placeholder.com/300x200?text=Food+Deal",
+            description: deal.description // Added for potential future use
+          }));
+          
+          setDeals(formattedDeals);
+        } else {
+          setError("No deals available or invalid response format");
+          setDeals([]);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching deals:", err);
+        setError("Failed to load deals. Please try again.");
+        setLoading(false);
+        setDeals([]);
+      });
+  }, []);
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100">
@@ -29,8 +63,6 @@ export default function Dashboard() {
 
       <main className="px-6 py-10 space-y-12 max-w-7xl mx-auto">
         {/* Welcome Section */}
-        <div className="flex items-center gap-4">
-        </div>
         <section className="rounded-2xl bg-white border border-orange-100 p-8 shadow-sm">
           <h2 className="text-3xl font-bold text-orange-600">
             Welcome {user?.name}!
@@ -55,11 +87,25 @@ export default function Dashboard() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {fakeDeals.map((deal) => (
-              <DealCard key={deal.id} deal={deal} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="text-orange-600">Loading deals...</div>
+            </div>
+          ) : error ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="text-red-500">{error}</div>
+            </div>
+          ) : deals.length === 0 ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="text-gray-500">No deals available at the moment</div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {deals.map((deal) => (
+                <DealCard key={deal.id} deal={deal} />
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Orders */}
