@@ -36,7 +36,7 @@ export default function Dashboard() {
             originalPrice: deal.originalPrice,
             quantity: deal.quantityLeft,
             expiresIn: deal.expiresAt,
-            image: deal.imageUrl || "https://via.placeholder.com/300x200?text=Food+Deal",
+            image: deal.imageUrl || 'https://www.eggoz.com/cdn/shop/articles/WhatsApp_Image_2024-09-07_at_5.05.44_PM.jpg?v=1725713796&width=1100',
             description: deal.description // Added for potential future use
           }));
           
