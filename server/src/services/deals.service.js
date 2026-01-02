@@ -76,22 +76,14 @@ export const getDealsByBusiness = async (businessId) => {
 
 
 export const getDealById = async (id) => {
-  try {
-    const [deal] = await db
-      .select()
-      .from(deals)
-      .where(eq(deals.id, id));
-    
-    if (!deal) {
-      throw new Error("Deal not found");
-    }
-    
-    return deal;
-  } catch (error) {
-    console.error(`Failed to get deal ${id}:`, error);
-    throw error;
-  }
+  const [deal] = await db
+    .select()
+    .from(deals)
+    .where(eq(deals.id, id));
+
+  return deal ?? null;
 };
+
 
 export const updateDeal = async (id, businessId, updateData) => {
   try {
