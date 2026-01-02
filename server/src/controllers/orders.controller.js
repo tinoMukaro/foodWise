@@ -33,7 +33,7 @@ export const create_order = async (req, res) => {
 
     
     const businessId = deal.businessId;
-    const totalPrice = deal.price * quantity;
+    const totalPrice = deal.dealPrice * quantity;
 
     const order = await createOrder({
       userId,

@@ -32,5 +32,6 @@ app.get('/', (req, res) => {
 app.use('/api/user', userRoutes);
 app.use('/api/business', businessRouter);
 app.use('/api/deals', dealsRoutes);
+app.use('/api/order', dealsRoutes);
 
 export default app;
