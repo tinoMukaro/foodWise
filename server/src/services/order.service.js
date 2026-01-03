@@ -1,11 +1,9 @@
 // create order
 import { db } from "../config/database.js";
 import { orders } from "../models/order.model.js";
+import { eq } from "drizzle-orm";
 
 export const createOrder = async(orderData)=>{
-
-    
-
     try{
         const pickupTime = orderData.pickupTime && !isNaN(new Date(orderData.pickupTime)
         .getTime())
@@ -41,6 +39,21 @@ export const createOrder = async(orderData)=>{
         console.error("failed to create an order");
         throw error;
         
+    }
+
+}
+
+export const getOrderbyBusiness = async(businessId)=>{
+    try{
+          const [order] = await db
+            .select()
+            .from(orders)
+            .where(eq(orders.businessId, businessId));
+        
+          return order ?? null;
+    }catch(error){
+        throw error;
+
     }
 
 }

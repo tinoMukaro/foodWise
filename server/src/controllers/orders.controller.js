@@ -1,4 +1,4 @@
-import { createOrder } from "../services/order.service.js";
+import { createOrder, getOrderbyBusiness } from "../services/order.service.js";
 import { createOrderSchema } from "../validations/order.validations.js";
 import { formatValidationError } from "../utils/format.js";
 import { getDealById } from '../services/deals.service.js'
@@ -52,5 +52,25 @@ export const create_order = async (req, res) => {
     console.error("Create order failed", error);
     return res.status(500).json({ error: "Internal server error" });
   }
+};
+
+
+export const getOrder_Business = async(req,res)=>{
+  try{
+    const businessId = req.business.business_id;
+
+    const orders = await getOrderbyBusiness(businessId);
+    
+        return res.status(200).json({
+          success: true,
+          data: orders,
+        });
+      } catch (error) {
+        console.error("Error fetching Orders:", error);
+        return res.status(500).json({
+          success: false,
+          message: "Failed to fetch Orders",
+        });
+    }
 };
 
