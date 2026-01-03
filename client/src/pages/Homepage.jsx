@@ -17,11 +17,10 @@ const Homepage = () => {
                 </div>
                 <div className="hidden md:flex space-x-8">
                     <a href="#how" className="text-gray-700 hover:text-[#2E7D32] font-medium">How it Works</a>
-                    <a href="#business" className="text-gray-700 hover:text-[#2E7D32] font-medium">For Businesses</a>
+                    <a href="#business" className="text-gray-700 hover:text-[#FF9800] font-medium">For Businesses</a>
                     <Link to="/signup" className="text-gray-700 hover:text-[#2E7D32] font-medium">Sign Up</Link>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <Link to="/auth" className="text-gray-700 hover:text-[#2E7D32] font-medium">Log In</Link>
                     <Link to="/auth" className="bg-[#FF9800] text-white px-6 py-2 rounded-full font-semibold hover:bg-orange-600 transition duration-300 shadow-md">
                         Get Started
                     </Link>

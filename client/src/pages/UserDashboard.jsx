@@ -10,7 +10,7 @@ export default function Dashboard() {
   const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  
   useEffect(() => {
     // Fetch user data
     getMe()
