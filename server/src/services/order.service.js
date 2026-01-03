@@ -3,7 +3,16 @@ import { db } from "../config/database.js";
 import { orders } from "../models/order.model.js";
 
 export const createOrder = async(orderData)=>{
+
+    
+
     try{
+        const pickupTime = orderData.pickupTime && !isNaN(new Date(orderData.pickupTime)
+        .getTime())
+        ? new Date(orderData.pickupTime)
+        : null;
+
+
         const [newOrder] = await db
         .insert(orders)
         .values({
@@ -15,7 +24,8 @@ export const createOrder = async(orderData)=>{
             status : "pending",
             specialInstructions: orderData.specialInstructions,
             paymentMethod: orderData.paymentMethod,
-            pickupTime: orderData.pickupTime
+            pickupTime: pickupTime
+
         })
         .returning({
             orderId: orders.id,
