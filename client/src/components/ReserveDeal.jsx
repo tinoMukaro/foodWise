@@ -20,12 +20,15 @@ export default function ReserveDealModal({ deal, onClose }) {
     e.preventDefault();
     setLoading(true);
     setError("");
+    const today = new Date().toISOString().split("T")[0]; // "2026-01-03"
+
+    const pickupTimeISO = form.pickupTime ? new Date(`${today}T${form.pickupTime}:00`).toISOString() : null;
 
     try {
       await createOrder({
         dealId: deal.id,           
         quantity: Number(form.quantity),
-        pickupTime: form.pickupTime,
+        pickupTime: pickupTimeISO,
         paymentMethod: form.paymentMethod,
         specialInstructions: form.specialInstructions,
       });
