@@ -22,6 +22,13 @@
       "when": 1766584860887,
       "tag": "0002_square_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1767438123689,
+      "tag": "0003_serious_mole_man",
+      "breakpoints": true
     }
   ]
 }

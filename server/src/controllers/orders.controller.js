@@ -1,6 +1,7 @@
-import { createOrder } from "../services/order.service";
-import { createOrderSchema } from "../validations/order.validations";
-import { formatValidationError } from "../utils/format";
+import { createOrder } from "../services/order.service.js";
+import { createOrderSchema } from "../validations/order.validations.js";
+import { formatValidationError } from "../utils/format.js";
+import { getDealById } from '../services/deals.service.js'
 
 export const create_order = async (req, res) => {
   try {

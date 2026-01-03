@@ -10,7 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { users } from "./user.model.js";
 import { business } from "./business.model.js";
-import { deals } from "./deal.model.js";
+import { deals } from "./deals.model.js";
 
 export const orders = pgTable("orders", {
   id: serial("id").primaryKey(),

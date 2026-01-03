@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user.Routes.js';
 import businessRouter from './routes/business.Routes.js';
 import dealsRoutes from './routes/deal.routes.js';
+import orderRoutes from './routes/order.routes.js'
 
 
 const app = express();
@@ -32,6 +33,6 @@ app.get('/', (req, res) => {
 app.use('/api/user', userRoutes);
 app.use('/api/business', businessRouter);
 app.use('/api/deals', dealsRoutes);
-app.use('/api/order', dealsRoutes);
+app.use('/api/order', orderRoutes);
 
 export default app;

@@ -24,6 +24,7 @@ export const UserAuth = (req, res, next) => {
     req.user = decoded;
     
     
+    
     next();
   } catch (err) {
     console.error("JWT error:", err.message);

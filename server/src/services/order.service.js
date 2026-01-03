@@ -1,6 +1,6 @@
 // create order
 import { db } from "../config/database.js";
-import { orders } from "../models/order.model";
+import { orders } from "../models/order.model.js";
 
 export const createOrder = async(orderData)=>{
     try{
@@ -18,10 +18,9 @@ export const createOrder = async(orderData)=>{
             pickupTime: orderData.pickupTime
         })
         .returning({
-            orderId: orders.orderId,
+            orderId: orders.id,
             totalPrice: orders.totalPrice,
             pickupTime: orders.pickupTime,
-            specialInstructions: orders.specialInstructions,
             status: orders.status
         })
 
