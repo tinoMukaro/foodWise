@@ -4,6 +4,7 @@ import { getMe } from "../services/business.service.js";
 import { getBusinessDeals } from "../services/deal.service.js";
 import { Link } from "react-router-dom";
 
+
 export default function BusinessDashboard() {
 
    const [business, setBusiness] = useState(null);
@@ -40,8 +41,11 @@ export default function BusinessDashboard() {
           <Link to="/createDeal">
              <NavItem icon={<Package size={18} />} label="Create Deals" />
           </Link>
+          <Link to="/order">
+             <NavItem icon={<ClipboardList size={18} />} label="Orders" />
+          </Link>
           
-          <NavItem icon={<ClipboardList size={18} />} label="Orders" />
+          
         </nav>
 
         <button className="flex items-center gap-3 px-6 py-4 text-red-400 hover:bg-white/5">
@@ -105,15 +109,6 @@ export default function BusinessDashboard() {
 
             </div>
           </section>
-
-          {/* Orders */}
-          <section>
-            <h2 className="text-lg font-semibold mb-4">Pending Orders</h2>
-            <div className="bg-[#020617] border border-white/10 rounded-xl divide-y divide-white/10">
-              <OrderRow />
-              <OrderRow />
-            </div>
-          </section>
         </main>
       </div>
     </div>
@@ -157,7 +152,7 @@ function DealCard({ deal }) {
   return (
     <div className="bg-[#020617] border border-white/10 rounded-xl overflow-hidden">
       {/* Header strip */}
-      <div className="h-28 bg-gradient-to-br from-[#22C55E]/30 to-transparent" />
+      
 
       <div className="p-4 space-y-2">
         <h3 className="font-semibold">
@@ -183,16 +178,3 @@ function DealCard({ deal }) {
   );
 }
 
-function OrderRow() {
-  return (
-    <div className="flex items-center justify-between px-5 py-4">
-      <div>
-        <p className="font-medium">Order #2041</p>
-        <p className="text-sm text-[#94A3B8]">1 item • Pickup 19:00</p>
-      </div>
-      <button className="bg-[#22C55E] hover:bg-[#16A34A] text-black text-sm font-semibold px-4 py-2 rounded-lg transition">
-        Mark Ready
-      </button>
-    </div>
-  );
-}

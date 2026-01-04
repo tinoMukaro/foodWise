@@ -5,6 +5,7 @@ import UserDashboard from "./pages/UserDashboard.jsx"
 import BusinessAuthDashboard from "./components/BusinessAuth.jsx"
 import BusinessDashboard from "./pages/BusinessDashboard.jsx"
 import CreateDeal from "./components/CreateDeal.jsx"
+import Orders from "./pages/Orders.jsx"
 
 function App() {
   
@@ -17,6 +18,7 @@ function App() {
       <Route path="/business" element={<BusinessAuthDashboard />} />
       <Route path="/businessDashboard" element={ <BusinessDashboard />} />
       <Route path="/createDeal" element={ <CreateDeal />} />
+      <Route path="/order" element={<Orders />} />
 
 
     </Routes>
