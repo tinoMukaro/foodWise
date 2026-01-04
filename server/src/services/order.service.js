@@ -43,20 +43,28 @@ export const createOrder = async(orderData)=>{
 
 }
 
-export const getOrderbyBusiness = async(businessId)=>{
-    try{
-          const [order] = await db
-            .select()
-            .from(orders)
-            .where(eq(orders.businessId, businessId));
-        
-          return order ?? null;
-    }catch(error){
-        throw error;
+export const getOrderbyBusiness = async (businessId) => {
+  try {
+    const ordersList = await db
+      .select({
+        userId: orders.userId,
+        dealId: orders.dealId,
+        quantity: orders.quantity,
+        totalPrice: orders.totalPrice,
+        status: orders.status,
+        pickupTime: orders.pickupTime,
+        specialInstructions: orders.specialInstructions,
+        createdAt: orders.createdAt,
+      })
+      .from(orders)
+      .where(eq(orders.businessId, businessId));
 
-    }
+    return ordersList; 
+  } catch (error) {
+    throw error;
+  }
+};
 
-}
 
 
-  
+   
