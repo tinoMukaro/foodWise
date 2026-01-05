@@ -2,6 +2,7 @@
 import { db } from "../config/database.js";
 import { orders } from "../models/order.model.js";
 import { eq } from "drizzle-orm";
+import { users } from "../models/user.model.js";
 
 export const createOrder = async(orderData)=>{
     try{
@@ -48,6 +49,7 @@ export const getOrderbyBusiness = async (businessId) => {
     const ordersList = await db
       .select({
         userId: orders.userId,
+        userName: users.name,
         dealId: orders.dealId,
         quantity: orders.quantity,
         totalPrice: orders.totalPrice,
@@ -57,6 +59,7 @@ export const getOrderbyBusiness = async (businessId) => {
         createdAt: orders.createdAt,
       })
       .from(orders)
+      .leftJoin(users, eq(orders.userId, users.id))
       .where(eq(orders.businessId, businessId));
 
     return ordersList; 
