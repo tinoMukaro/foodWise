@@ -3,10 +3,10 @@ function OrderRow({ order }) {
     <div className="flex items-center justify-between px-5 py-4">
       <div>
         <p className="font-medium">
-          Deal #{order.dealId}
+          Customer: {order.userName}
         </p>
 
-        <p className="text-sm text-[#94A3B8]">
+        <p className="text-sm text-[#000000]">
           Qty: {order.quantity} • Pickup{" "}
           {new Date(order.pickupTime).toLocaleTimeString([], {
             hour: "2-digit",
@@ -15,7 +15,7 @@ function OrderRow({ order }) {
         </p>
 
         {order.specialInstructions && (
-          <p className="text-xs text-[#94A3B8] mt-1">
+          <p className="text-xs text-[#000000] mt-1">
             Note: {order.specialInstructions}
           </p>
         )}
@@ -23,7 +23,7 @@ function OrderRow({ order }) {
 
       <div className="text-right">
         <p className="font-semibold">${order.totalPrice}</p>
-        <p className="text-xs text-[#94A3B8] capitalize">
+        <p className="text-xs text-[#000000] capitalize">
           {order.status}
         </p>
       </div>

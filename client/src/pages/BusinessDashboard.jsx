@@ -169,9 +169,11 @@ function DealCard({ deal }) {
             Expires in {expiresInHours}h
           </span>
 
-          <button className="text-sm text-red-400 hover:text-red-300">
-            Disable
-          </button>
+          <p className={`text-sm ${deal.status === 'active' ? 'text-green-400 hover:text-green-300' : 'text-red-400 hover:text-red-300'}`}>
+             {deal.status}
+          </p>
+
+          
         </div>
       </div>
     </div>
