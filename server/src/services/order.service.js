@@ -49,6 +49,7 @@ export const getOrderbyBusiness = async (businessId) => {
   try {
     const ordersList = await db
       .select({
+        orderId:orders.id,
         userId: orders.userId,
         userName: users.name,
         dealId: orders.dealId,
@@ -62,6 +63,30 @@ export const getOrderbyBusiness = async (businessId) => {
       .from(orders)
       .leftJoin(users, eq(orders.userId, users.id))
       .where(eq(orders.businessId, businessId));
+
+    return ordersList; 
+  } catch (error) {
+    throw error;
+  }
+};
+export const getOrderbyUser = async (userId) => {
+  try {
+    const ordersList = await db
+      .select({
+        orderId:orders.id,
+        userId: orders.userId,
+        userName: users.name,
+        dealId: orders.dealId,
+        quantity: orders.quantity,
+        totalPrice: orders.totalPrice,
+        status: orders.status,
+        pickupTime: orders.pickupTime,
+        specialInstructions: orders.specialInstructions,
+        createdAt: orders.createdAt,
+      })
+      .from(orders)
+      .leftJoin(users, eq(orders.userId, users.id))
+      .where(eq(orders.userId, userId));
 
     return ordersList; 
   } catch (error) {
@@ -137,14 +162,16 @@ export async function cancelOrderByUser(orderId, userId) {
   return updateOrderStatus(orderId, ORDER_STATUS.CANCELLED);
 }
 
-export async function collectOrder(orderId, userId) {
+export async function markOrderCollected(orderId, businessId) {
   const [order] = await db
     .select()
     .from(orders)
     .where(eq(orders.id, orderId));
 
   if (!order) throw new Error("Order not found");
-  if (order.userId !== userId) throw new Error("Unauthorized");
+  if (order.businessId !== businessId) {
+    throw new Error("Unauthorized");
+  }
 
   return updateOrderStatus(orderId, ORDER_STATUS.COLLECTED);
 }
