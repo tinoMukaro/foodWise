@@ -9,4 +9,9 @@ export const getOrders = async () => {
   const res = await API.get("/api/order");
   return res.data.data; 
 };
+export const getUserOrder = async () => {
+  const res = await API.get("/api/order/user");
+  return res.data.data; 
+};
+
 
