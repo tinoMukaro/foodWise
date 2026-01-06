@@ -14,4 +14,27 @@ export const getUserOrder = async () => {
   return res.data.data; 
 };
 
+//order cycles
+//user
+export const cancelOrder = async (orderId) => {
+  const res = await API.post(`/api/order/${orderId}/cancel`);
+  return res.data;
+};
+//business
+export const confirmOrder = async (orderId) => {
+  const res = await API.post(`/api/order/${orderId}/confirm`);
+  return res.data;
+};
+
+export const markOrderReady = async (orderId) => {
+  const res = await API.post(`/api/order/${orderId}/ready`);
+  return res.data;
+};
+
+export const collectOrder = async (orderId) => {
+  const res = await API.post(`/api/order/${orderId}/collect`);
+  return res.data;
+};
+
+
 

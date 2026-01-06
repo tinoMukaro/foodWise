@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import OrderRow from "../components/OrderRow.jsx";
-import { getOrders } from "../services/orders.service.js";
+import { getOrders,confirmOrder,markOrderReady,collectOrder, } from "../services/orders.service.js";
+
 
 export default function OrdersDashboard() {
   const [orders, setOrders] = useState([]);
@@ -21,46 +22,112 @@ export default function OrdersDashboard() {
     fetchOrders();
   }, []);
 
+  const updateOrderStatus = (orderId, status) => {
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.orderId === orderId ? { ...order, status } : order
+      )
+    );
+  };
+
+  const handleConfirm = async (orderId) => {
+    try {
+      await confirmOrder(orderId);
+      updateOrderStatus(orderId, "confirmed");
+    } catch (err) {
+      console.error("Failed to confirm order", err);
+    }
+  };
+
+  const handleReady = async (orderId) => {
+    try {
+      await markOrderReady(orderId);
+      updateOrderStatus(orderId, "ready");
+    } catch (err) {
+      console.error("Failed to mark order ready", err);
+    }
+  };
+
+  const handleCollect = async (orderId) => {
+    try {
+      await collectOrder(orderId);
+      updateOrderStatus(orderId, "collected");
+    } catch (err) {
+      console.error("Failed to collect order", err);
+    }
+  };
+
   return (
-    <section className="p-6 bg-gray-800 min-h-screen">
-      <h2 className="text-2xl font-bold text-white mb-6">Your Orders</h2>
+    <section className="min-h-screen bg-slate-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-2xl font-semibold text-slate-800 mb-6">
+          Orders Dashboard
+        </h2>
 
-      {loading && (
-        <p className="text-sm text-[#94A3B8]">Loading orders...</p>
-      )}
+        {loading && (
+          <p className="text-sm text-slate-500">Loading orders…</p>
+        )}
 
-      {!loading && orders.length === 0 && (
-        <p className="text-sm text-[#94A3B8]">No orders yet</p>
-      )}
+        {!loading && orders.length === 0 && (
+          <p className="text-sm text-slate-500">No orders available</p>
+        )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {!loading &&
-          orders.map((order, index) => (
-            <div
-              key={index}
-              className="bg-green-100 border border-white/10 rounded-xl p-4 shadow-lg hover:shadow-[#22C55E]/20 transition"
-            >
-              <OrderRow order={order} />
-              <div className="mt-3 flex justify-between items-center">
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    order.status === "pending"
-                      ? "bg-yellow-500 text-black"
-                      : "bg-green-500 text-black"
-                  }`}
-                >
-                  {order.status.toUpperCase()}
-                </span>
-                <span className="text-xs text-[#94A3B8]">
-                  {new Date(order.createdAt).toLocaleDateString()}{" "}
-                  {new Date(order.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {!loading &&
+            orders.map((order, index) => (
+              <div
+                key={index}
+                className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm"
+              >
+                <OrderRow order={order} />
+
+                {/* ACTIONS */}
+                <div className="mt-4 flex gap-2">
+                  {order.status === "pending" && (
+                    <button
+                      onClick={() => handleConfirm(order.orderId)}
+                      className="px-4 py-1.5 text-sm border border-slate-300 rounded-md text-slate-700 hover:bg-slate-100"
+                    >
+                      Confirm
+                    </button>
+                  )}
+
+                  {order.status === "confirmed" && (
+                    <button
+                      onClick={() => handleReady(order.orderId)}
+                      className="px-4 py-1.5 text-sm border border-slate-300 rounded-md text-slate-700 hover:bg-slate-100"
+                    >
+                      Mark Ready
+                    </button>
+                  )}
+
+                  {order.status === "ready" && (
+                    <button
+                      onClick={() => handleCollect(order.orderId)}
+                      className="px-4 py-1.5 text-sm border border-slate-300 rounded-md text-slate-700 hover:bg-slate-100"
+                    >
+                      Collect
+                    </button>
+                  )}
+                </div>
+
+                {/* STATUS + TIME */}
+                <div className="mt-4 flex justify-between items-center text-xs">
+                  <span className="px-2 py-1 rounded-full border border-slate-300 text-slate-600 uppercase">
+                    {order.status}
+                  </span>
+
+                  <span className="text-slate-400">
+                    {new Date(order.createdAt).toLocaleDateString()}{" "}
+                    {new Date(order.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </div>
       </div>
     </section>
   );

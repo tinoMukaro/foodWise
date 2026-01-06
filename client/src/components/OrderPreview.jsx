@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getUserOrder } from "../services/orders.service"; // adjust path if needed
+import { getUserOrder, cancelOrder } from "../services/orders.service"; 
+
 
 export default function OrdersPreview() {
   const [orders, setOrders] = useState([]);
@@ -19,6 +20,24 @@ export default function OrdersPreview() {
 
     fetchOrders();
   }, []);
+//cancel
+const handleCancel = async (orderId) => {
+  try {
+    await cancelOrder(orderId);
+
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.orderId === orderId
+          ? { ...order, status: "cancelled" }
+          : order
+      )
+    );
+  } catch (error) {
+    console.error("Failed to cancel order:", error);
+  }
+};
+
+
 
   return (
     <div className="bg-white rounded-xl p-6 border">
@@ -72,9 +91,25 @@ export default function OrdersPreview() {
                   “{order.specialInstructions}”
                 </div>
               )}
+                <div className="text-gray-600">
+                Status:{" "}
+                <span className="capitalize font-medium">
+                  {order.status}
+                </span>
+              </div>
+
+              {order.status === "pending" && (
+                <button
+                  onClick={() => handleCancel(order.orderId)}
+                  className="mt-2 text-sm text-red-600 hover:underline"
+                >
+                  Cancel order
+                </button>
+              )}
             </div>
           ))}
         </div>
+
       )}
     </div>
   );
