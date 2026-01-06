@@ -45,7 +45,6 @@ export const ORDER_STATUS = {
   PENDING: "pending",
   CONFIRMED: "confirmed",
   READY: "ready",
-  COMPLETED: "completed",
+  COLLECTED: "collected",
   CANCELLED: "cancelled",
 };
-

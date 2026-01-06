@@ -2,6 +2,7 @@ import { createOrder, getOrderbyBusiness } from "../services/order.service.js";
 import { createOrderSchema } from "../validations/order.validations.js";
 import { formatValidationError } from "../utils/format.js";
 import { getDealById } from '../services/deals.service.js'
+import {confirmOrder,markOrderReady,cancelOrderByUser,collectOrder,} from "../services/order.service.js";
 
 export const create_order = async (req, res) => {
   try {
@@ -73,4 +74,56 @@ export const getOrder_Business = async(req,res)=>{
         });
     }
 };
+
+//order cycles
+
+
+//busines
+export async function confirmOrderController(req, res) {
+  try {
+    const { orderId } = req.params;
+     const businessId = req.business.business_id;
+
+    const order = await confirmOrder(Number(orderId), businessId);
+    res.json(order);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+export async function markReadyController(req, res) {
+  try {
+    const { orderId } = req.params;
+     const businessId = req.business.business_id;
+
+    const order = await markOrderReady(Number(orderId), businessId);
+    res.json(order);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+//user
+export async function cancelOrderController(req, res) {
+  try {
+    const { orderId } = req.params;
+    const userId = req.user.id;
+
+    const order = await cancelOrderByUser(Number(orderId), userId);
+    res.json(order);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+export async function collectOrderController(req, res) {
+  try {
+    const { orderId } = req.params;
+    const userId = req.user.id;
+
+    const order = await collectOrder(Number(orderId), userId);
+    res.json(order);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
 
