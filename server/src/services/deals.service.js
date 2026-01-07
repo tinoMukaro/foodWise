@@ -1,7 +1,7 @@
 import { db } from "../config/database.js";
 import { deals } from "../models/deals.model.js";
 import { business } from "../models/business.model.js";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, gte, sql } from "drizzle-orm";
 
 export const createDeal = async (dealData) => {
   try {
@@ -42,6 +42,28 @@ export const createDeal = async (dealData) => {
     console.error("Failed to create deal:", error);
     throw error;
   }
+};
+
+export const decreaseDealQuantity = async (dealId, quantity) => {
+  const [updatedDeal] = await db
+    .update(deals)
+    .set({
+      quantityLeft: sql`${deals.quantityLeft} - ${quantity}`,
+      updatedAt: new Date(),
+    })
+    .where(
+      and(
+        eq(deals.id, dealId),
+        gte(deals.quantityLeft, quantity)
+      )
+    )
+    .returning();
+
+  if (!updatedDeal) {
+    throw new Error("Not enough deal quantity available");
+  }
+
+  return updatedDeal;
 };
 
 

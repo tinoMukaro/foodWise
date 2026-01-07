@@ -15,41 +15,19 @@ export const create_order = async (req, res) => {
       });
     }
 
-    const {
-      dealId,
-      quantity,
-      paymentMethod,
-      pickupTime,
-      specialInstructions,
-    } = validationResult.data;
-
-    
     const userId = req.user.id;
-
-    
-    const deal = await getDealById(dealId);
-
-    if (!deal) {
-      return res.status(404).json({ error: "Deal not found" });
-    }
-
-    
-    const businessId = deal.businessId;
-    const totalPrice = deal.dealPrice * quantity;
 
     const order = await createOrder({
       userId,
-      dealId,
-      businessId,
-      quantity,
-      totalPrice,
-      paymentMethod,
-      pickupTime,
-      specialInstructions,
+      ...validationResult.data,
     });
 
     return res.status(201).json(order);
   } catch (error) {
+    if (error.message.includes("quantity")) {
+      return res.status(400).json({ error: error.message });
+    }
+
     console.error("Create order failed", error);
     return res.status(500).json({ error: "Internal server error" });
   }
