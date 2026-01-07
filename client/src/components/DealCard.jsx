@@ -48,13 +48,20 @@ export default function DealCard({ deal }) {
 
           {/* CTA */}
           <button
-            onClick={() => {
-              setSelectedDeal(deal);
-              setShowModal(true);
-            }}
-            className="bg-green-600 text-white px-4 py-2 rounded"
-          >
-            Reserve Deal
+                disabled={deal.quantity === 0}
+                onClick={() => {
+                  if (deal.quantity === 0) return; // safety net
+                  setSelectedDeal(deal);
+                  setShowModal(true);
+                }}
+                className={`px-4 py-2 rounded text-white transition
+                  ${deal.quantity === 0
+                    ? "bg-red-600 cursor-not-allowed"
+                    : "bg-green-600 hover:bg-green-700"
+                  }
+                `}
+              >
+                {deal.quantity === 0 ? "Sold Out" : "Reserve Deal"}
           </button>
         </div>
       </div>
