@@ -28,3 +28,27 @@ export async function expireDeals() {
     console.error("Deal expiration failed:", error);
   }
 }
+
+
+export const autoDeleteExpiredDeals = async () => {
+  try {
+    const now = new Date();
+
+    const result = await db
+      .delete(deals)
+      .where(
+        and(
+          lte(deals.expiresAt, now),
+          eq(deals.status, "expired")
+        )
+      )
+      .returning({ id: deals.id });
+
+    if (result.length > 0) {
+      console.log(`Deleted ${result.length} expired deal(s) at`, now);
+    }
+  } catch (error) {
+    console.error("Expired deal deletion failed:", error);
+  }
+}
+
