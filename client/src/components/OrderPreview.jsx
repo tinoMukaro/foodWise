@@ -64,7 +64,7 @@ const handleCancel = async (orderId) => {
             >
               <div className="flex justify-between">
                 <span className="font-medium">
-                  Deal #{order.dealId}
+                  Deal : {order.dealName}
                 </span>
                 <span className="text-[#2E7D32] font-semibold">
                   ${order.totalPrice}
