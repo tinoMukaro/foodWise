@@ -5,7 +5,7 @@ import {
   get_deal_by_id,
   update_deal,
   delete_deal,
-  update_deal_status,
+  
   getDealsForUser
 } from "../controllers/deals.controller.js";
 import { authenticateBusiness } from "../middleware/business.middleware.js";
@@ -23,6 +23,6 @@ dealsRouter.get("/", authenticateBusiness, get_my_deals);
 dealsRouter.post("/", authenticateBusiness, create_deal);
 dealsRouter.put("/:id", authenticateBusiness, update_deal);
 dealsRouter.delete("/:id", authenticateBusiness, delete_deal);
-dealsRouter.patch("/:id/status", authenticateBusiness, update_deal_status);
+
 
 export default dealsRouter;

@@ -4,7 +4,6 @@ import {
   getDealById,
   updateDeal,
   deleteDeal,
-  updateDealStatus,
   getAllActiveDeals
 } from "../services/deals.service.js";
 import {
@@ -205,40 +204,3 @@ export const delete_deal = async (req, res, next) => {
   }
 };
 
-export const update_deal_status = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const businessId = req.business.business_id;
-    
-    const validationResult = statusSchema.safeParse(req.body);
-    
-    if (!validationResult.success) {
-      return res.status(400).json({
-        error: "Validation failed",
-        details: formatValidationError(validationResult.error),
-      });
-    }
-    
-    const { status } = validationResult.data;
-    
-    const updatedDeal = await updateDealStatus(parseInt(id), businessId, status);
-    
-    return res.status(200).json({
-      success: true,
-      message: "Deal status updated successfully",
-      data: updatedDeal,
-    });
-  } catch (error) {
-    console.error("Error updating deal status:", error);
-    if (error.message === "Deal not found or unauthorized") {
-      return res.status(404).json({
-        success: false,
-        message: "Deal not found or you don't have permission to update it",
-      });
-    }
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Failed to update deal status",
-    });
-  }
-};

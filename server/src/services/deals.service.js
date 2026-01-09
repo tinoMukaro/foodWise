@@ -200,35 +200,6 @@ export const deleteDeal = async (id, businessId) => {
   }
 };
 
-export const updateDealStatus = async (id, businessId, status) => {
-  try {
-    const [updatedDeal] = await db
-      .update(deals)
-      .set({
-        status,
-        updatedAt: new Date(),
-      })
-      .where(
-        and(
-          eq(deals.id, id),
-          eq(deals.businessId, businessId)
-        )
-      )
-      .returning({
-        id: deals.id,
-        status: deals.status,
-      });
-    
-    if (!updatedDeal) {
-      throw new Error("Deal not found or unauthorized");
-    }
-    
-    return updatedDeal;
-  } catch (error) {
-    console.error(`Failed to update status for deal ${id}:`, error);
-    throw error;
-  }
-};
 
 export const getAllActiveDeals = async () => {
   try {
