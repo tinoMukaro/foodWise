@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { users } from "../models/user.model.js";
 import { canTransition } from "../utils/orderTransitions.js";
 import { decreaseDealQuantity } from "./deals.service.js";
+import { deals } from "../models/deals.model.js";
 
 
 export const createOrder = async (orderData) => {
@@ -51,6 +52,7 @@ export const getOrderbyBusiness = async (businessId) => {
         userId: orders.userId,
         userName: users.name,
         dealId: orders.dealId,
+        dealName: deals.title, 
         quantity: orders.quantity,
         totalPrice: orders.totalPrice,
         status: orders.status,
@@ -60,6 +62,7 @@ export const getOrderbyBusiness = async (businessId) => {
       })
       .from(orders)
       .leftJoin(users, eq(orders.userId, users.id))
+      .leftJoin(deals, eq(orders.dealId, deals.id))
       .where(eq(orders.businessId, businessId));
 
     return ordersList; 
@@ -75,6 +78,7 @@ export const getOrderbyUser = async (userId) => {
         userId: orders.userId,
         userName: users.name,
         dealId: orders.dealId,
+        dealName: deals.title, 
         quantity: orders.quantity,
         totalPrice: orders.totalPrice,
         status: orders.status,
@@ -84,6 +88,7 @@ export const getOrderbyUser = async (userId) => {
       })
       .from(orders)
       .leftJoin(users, eq(orders.userId, users.id))
+      .leftJoin(deals, eq(orders.dealId, deals.id))
       .where(eq(orders.userId, userId));
 
     return ordersList; 
