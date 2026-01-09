@@ -5,18 +5,47 @@ export default function DealCard({ deal }) {
   const [selectedDeal, setSelectedDeal] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+function getExpiryText(dateString) {
+  if (!dateString) return "No expiry date";
+
+  const now = new Date();
+  const expiry = new Date(dateString);
+
+  
+  if (isNaN(expiry.getTime())) {
+    return "Invalid expiry date";
+  }
+
+  const diffMs = expiry - now;
+
+  
+  if (diffMs <= 0) {
+    return "Expired";
+  }
+
+  const minutes = Math.floor(diffMs / 60000);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (minutes < 60) return `Expires in ${minutes} min`;
+  if (hours < 24) return `Expires in ${hours} hrs`;
+  return `Expires in ${days} day(s)`;
+}
+
+
+
   return (
     <>
       {/* Deal Card */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden border">
-        {/* Image */}
+        
         <img
           src={deal.image}
           alt={deal.title}
           className="h-40 w-full object-cover"
         />
 
-        {/* Content */}
+       
         <div className="p-4 space-y-2">
           <h3 className="font-semibold text-[#333333]">
             {deal.title}
@@ -26,7 +55,7 @@ export default function DealCard({ deal }) {
             {deal.business} • {deal.location}
           </p>
 
-          {/* Price */}
+          
           <div className="flex items-center gap-2">
             <span className="text-lg font-bold text-[#2E7D32]">
               ${deal.price}
@@ -36,21 +65,23 @@ export default function DealCard({ deal }) {
             </span>
           </div>
 
-          {/* Meta */}
+          
           <div className="flex justify-between text-sm">
             <span className="text-[#4CAF50]">
               {deal.quantity} left
             </span>
-            <span className="text-orange-600">
-              {deal.expiresIn}
-            </span>
+            
+              <p className="text-sm text-red-600">
+                {getExpiryText(deal.expiresIn)}
+             </p>
+            
           </div>
 
-          {/* CTA */}
+          
           <button
                 disabled={deal.quantity === 0}
                 onClick={() => {
-                  if (deal.quantity === 0) return; // safety net
+                  if (deal.quantity === 0) return; 
                   setSelectedDeal(deal);
                   setShowModal(true);
                 }}

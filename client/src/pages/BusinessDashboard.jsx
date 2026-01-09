@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getMe } from "../services/business.service.js";
 import { getBusinessDeals } from "../services/deal.service.js";
 import { Link } from "react-router-dom";
+import DealCard from "../components/Business.dealCard.jsx";
 
 
 export default function BusinessDashboard() {
@@ -103,7 +104,12 @@ export default function BusinessDashboard() {
                 </p>
               ) : (
                 deals.map((deal) => (
-                  <DealCard key={deal.id} deal={deal} />
+                  <DealCard 
+                  key={deal.id} 
+                  deal={deal}
+                  onDelete={(id) =>
+                    setDeals(prev => prev.filter(d => d.id !== id))
+                  } />
                 ))
               )}
 
@@ -141,42 +147,5 @@ function StatCard({ label, value }) {
   );
 }
 
-function DealCard({ deal }) {
-  const expiresInHours = Math.max(
-    0,
-    Math.floor(
-      (new Date(deal.expiresAt) - new Date()) / (1000 * 60 * 60)
-    )
-  );
 
-  return (
-    <div className="bg-[#020617] border border-white/10 rounded-xl overflow-hidden">
-      {/* Header strip */}
-      
-
-      <div className="p-4 space-y-2">
-        <h3 className="font-semibold">
-          {deal.title}
-        </h3>
-
-        <p className="text-sm text-[#94A3B8]">
-          ${deal.dealPrice} instead of ${deal.originalPrice} •{" "}
-          {deal.quantityLeft}/{deal.quantityTotal} left
-        </p>
-
-        <div className="flex justify-between items-center pt-2">
-          <span className="text-xs text-[#94A3B8]">
-            Expires in {expiresInHours}h
-          </span>
-
-          <p className={`text-sm ${deal.status === 'active' ? 'text-green-400 hover:text-green-300' : 'text-red-400 hover:text-red-300'}`}>
-             {deal.status}
-          </p>
-
-          
-        </div>
-      </div>
-    </div>
-  );
-}
 

@@ -116,7 +116,9 @@ export default function CreateDeal() {
             className="w-full bg-[#020617] border border-slate-700 p-2 rounded"
             required
           />
-
+           <p className="text-sm text-gray-400">
+            Set the expiration date and time for this deal.
+          </p>
           <input
             name="expiresAt"
             type="datetime-local"
