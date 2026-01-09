@@ -1,5 +1,7 @@
-
-import { signupSchema, signInSchema } from '../validations/userAuth.validations.js';
+import {
+  signupSchema,
+  signInSchema,
+} from '../validations/userAuth.validations.js';
 import { formatValidationError } from '../utils/format.js';
 import { createUser, authenticateUser } from '../services/userAuth.service.js';
 import { jwttoken } from '../utils/jwt.js';
@@ -115,4 +117,3 @@ export const getMe = async (req, res) => {
     email: req.user.email,
   });
 };
-

@@ -7,7 +7,7 @@ import 'dotenv/config.js';
 export const authenticateBusiness = async (req, res, next) => {
   try {
     const token = req.cookies?.token;
-    
+
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -15,9 +15,8 @@ export const authenticateBusiness = async (req, res, next) => {
       });
     }
 
-  
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
+
     if (decoded.role !== 'business') {
       return res.status(403).json({
         success: false,
@@ -25,12 +24,11 @@ export const authenticateBusiness = async (req, res, next) => {
       });
     }
 
-
     const [businessData] = await db
       .select({
         id: business.id,
         email: business.email,
-        name: business.name,  
+        name: business.name,
         type: business.type,
         location: business.location,
       })
@@ -44,12 +42,11 @@ export const authenticateBusiness = async (req, res, next) => {
       });
     }
 
-    
     req.business = {
       business_id: businessData.id,
       id: businessData.id,
       email: businessData.email,
-      name: businessData.name,  
+      name: businessData.name,
       type: businessData.type,
       location: businessData.location,
     };
@@ -80,26 +77,23 @@ export const authenticateBusiness = async (req, res, next) => {
 };
 
 export const businessAuth = (req, res, next) => {
-  
-
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(401).json({ message: "No token" });
+    return res.status(401).json({ message: 'No token' });
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-   
 
-    if (decoded.role !== "business") {
-      return res.status(403).json({ message: "Not business" });
+    if (decoded.role !== 'business') {
+      return res.status(403).json({ message: 'Not business' });
     }
 
     req.business = decoded;
     next();
   } catch (err) {
-    console.error("JWT error:", err.message);
-    return res.status(401).json({ message: "Invalid token" });
+    console.error('JWT error:', err.message);
+    return res.status(401).json({ message: 'Invalid token' });
   }
 };

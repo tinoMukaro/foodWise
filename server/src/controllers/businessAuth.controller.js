@@ -1,7 +1,12 @@
-
-import { signupSchema, signInSchema } from '../validations/businessAuth.validation.js';
+import {
+  signupSchema,
+  signInSchema,
+} from '../validations/businessAuth.validation.js';
 import { formatValidationError } from '../utils/format.js';
-import { createBusiness, authenticateBusiness } from '../services/businessAuth.js';
+import {
+  createBusiness,
+  authenticateBusiness,
+} from '../services/businessAuth.js';
 import { jwttoken } from '../utils/jwt.js';
 import { cookies } from '../utils/cookies.js';
 
@@ -16,9 +21,29 @@ export const signup = async (req, res, next) => {
       });
     }
 
-    const { name, type, email, password, phone, phone2, location, openingHours, description } = validationResult.data;
+    const {
+      name,
+      type,
+      email,
+      password,
+      phone,
+      phone2,
+      location,
+      openingHours,
+      description,
+    } = validationResult.data;
 
-    const Business = await createBusiness({ name, type, email, password, phone, phone2, location, openingHours, description });
+    const Business = await createBusiness({
+      name,
+      type,
+      email,
+      password,
+      phone,
+      phone2,
+      location,
+      openingHours,
+      description,
+    });
 
     const token = jwttoken.sign({
       id: Business.id,
@@ -87,7 +112,10 @@ export const signIn = async (req, res, next) => {
   } catch (e) {
     console.error('Sign in error', e);
 
-    if (e.message === 'Business not found' || e.message === 'Invalid password') {
+    if (
+      e.message === 'Business not found' ||
+      e.message === 'Invalid password'
+    ) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
@@ -116,4 +144,3 @@ export const getMe = async (req, res) => {
     email: req.business.email,
   });
 };
-

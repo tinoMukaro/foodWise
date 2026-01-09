@@ -4,22 +4,21 @@ import {
   getDealById,
   updateDeal,
   deleteDeal,
-  getAllActiveDeals
-} from "../services/deals.service.js";
+  getAllActiveDeals,
+} from '../services/deals.service.js';
 import {
   createDealSchema,
   updateDealSchema,
-  statusSchema,
-} from "../validations/deals.validation.js";
-import { formatValidationError } from "../utils/format.js";
+} from '../validations/deals.validation.js';
+import { formatValidationError } from '../utils/format.js';
 
 export const create_deal = async (req, res) => {
   try {
     const validationResult = createDealSchema.safeParse(req.body);
-    
+
     if (!validationResult.success) {
       return res.status(400).json({
-        error: "Validation failed",
+        error: 'Validation failed',
         details: formatValidationError(validationResult.error),
       });
     }
@@ -34,9 +33,9 @@ export const create_deal = async (req, res) => {
       pickupLocation,
       imageUrl,
     } = validationResult.data;
-    
+
     const business_id = req.business.business_id;
-    
+
     const newDeal = await createDeal({
       business_id,
       title,
@@ -51,21 +50,20 @@ export const create_deal = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Deal created successfully",
+      message: 'Deal created successfully',
       data: newDeal,
     });
   } catch (error) {
-    console.error("Error creating deal:", error);
+    console.error('Error creating deal:', error);
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to create deal",
+      message: error.message || 'Failed to create deal',
     });
   }
 };
 
 export const get_my_deals = async (req, res) => {
   try {
-    
     const businessId = req.business.business_id;
 
     const deals = await getDealsByBusiness(businessId);
@@ -75,10 +73,10 @@ export const get_my_deals = async (req, res) => {
       data: deals,
     });
   } catch (error) {
-    console.error("Error fetching business deals:", error);
+    console.error('Error fetching business deals:', error);
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch deals",
+      message: 'Failed to fetch deals',
     });
   }
 };
@@ -86,121 +84,117 @@ export const get_my_deals = async (req, res) => {
 export const getDealsForUser = async (req, res) => {
   try {
     const available_deals = await getAllActiveDeals();
-    
-    
+
     if (!available_deals || available_deals.length === 0) {
       return res.status(200).json({
         success: true,
         data: [],
-        message: "No deals available at the moment"
+        message: 'No deals available at the moment',
       });
     }
-    
+
     return res.status(200).json({
       success: true,
       data: available_deals,
     });
-
-  } catch(error) {
-    console.error("Error fetching deals for user:", error);
+  } catch (error) {
+    console.error('Error fetching deals for user:', error);
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch deals",
-    }); 
+      message: 'Failed to fetch deals',
+    });
   }
-}
+};
 
 export const get_deal_by_id = async (req, res) => {
   try {
     const { id } = req.params;
     const deal = await getDealById(parseInt(id));
-    
+
     return res.status(200).json({
       success: true,
       data: deal,
     });
   } catch (error) {
-    console.error("Error getting deal:", error);
-    if (error.message === "Deal not found") {
+    console.error('Error getting deal:', error);
+    if (error.message === 'Deal not found') {
       return res.status(404).json({
         success: false,
-        message: "Deal not found",
+        message: 'Deal not found',
       });
     }
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to get deal",
+      message: error.message || 'Failed to get deal',
     });
   }
 };
 
-export const update_deal = async (req, res, next) => {
+export const update_deal = async (req, res) => {
   try {
     const { id } = req.params;
     const businessId = req.business.business_id;
-    
+
     const validationResult = updateDealSchema.safeParse(req.body);
-    
+
     if (!validationResult.success) {
       return res.status(400).json({
-        error: "Validation failed",
+        error: 'Validation failed',
         details: formatValidationError(validationResult.error),
       });
     }
-    
+
     const updateData = validationResult.data;
-    
- 
+
     delete updateData.id;
     delete updateData.businessId;
     delete updateData.createdAt;
-    
+
     const updatedDeal = await updateDeal(parseInt(id), businessId, updateData);
-    
+
     return res.status(200).json({
       success: true,
-      message: "Deal updated successfully",
+      message: 'Deal updated successfully',
       data: updatedDeal,
     });
   } catch (error) {
-    console.error("Error updating deal:", error);
-    if (error.message === "Deal not found or unauthorized") {
+    console.error('Error updating deal:', error);
+    if (error.message === 'Deal not found or unauthorized') {
       return res.status(404).json({
         success: false,
-        message: "Deal not found or you don't have permission to update it",
+        message: 'Deal not found or you do not have permission to update it',
       });
     }
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to update deal",
+      message: error.message || 'Failed to update deal',
     });
   }
 };
 
-export const delete_deal = async (req, res, next) => {
+export const delete_deal = async (req, res) => {
   try {
     const { id } = req.params;
     const businessId = req.business.business_id;
-    
+
     const deletedDeal = await deleteDeal(parseInt(id), businessId);
-    
+
     return res.status(200).json({
       success: true,
-      message: "Deal deleted successfully",
+      message: 'Deal deleted successfully',
       data: deletedDeal,
     });
   } catch (error) {
-    console.error("Error deleting deal:", error);
-    if (error.message === "Deal not found or unauthorized") {
+    console.error('Error deleting deal:', error);
+    if (error.message === 'Deal not found or unauthorized') {
       return res.status(404).json({
         success: false,
-        message: "Deal not found or you don't have permission to delete it",
+        message: 'Deal not found or you do not have permission to delete it',
       });
     }
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to delete deal",
+      message: error.message || 'Failed to delete deal',
     });
   }
 };
-

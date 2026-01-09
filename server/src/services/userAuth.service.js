@@ -1,8 +1,7 @@
 import { users } from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
-import {db }  from '../config/database.js';
-
+import { db } from '../config/database.js';
 
 export const hashPassword = async password => {
   try {
@@ -22,8 +21,8 @@ export const comparePassword = async (password, hashedPassword) => {
   }
 };
 
-export const createUser = async({ name, email, password, role = 'user' })=>{
-      try {
+export const createUser = async ({ name, email, password, role = 'user' }) => {
+  try {
     const existingUser = await db
       .select()
       .from(users)
@@ -35,35 +34,31 @@ export const createUser = async({ name, email, password, role = 'user' })=>{
 
     const password_hash = await hashPassword(password);
 
-    
     const [newUser] = await db
       .insert(users)
-      .values({ 
-        name, 
-        email, 
-        password: password_hash, 
-        role: role || 'user'  
+      .values({
+        name,
+        email,
+        password: password_hash,
+        role: role || 'user',
       })
       .returning({
         id: users.id,
         name: users.name,
         email: users.email,
         role: users.role,
-        createdAt: users.createdAt,  
-        updatedAt: users.updatedAt   
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt,
       });
 
     console.log(`User ${newUser.email} created successfully`);
 
     return newUser;
-    
   } catch (e) {
     console.error(`Error creating the user: ${e}`);
     throw e;
   }
-
-}
-
+};
 
 export const authenticateUser = async ({ email, password }) => {
   try {

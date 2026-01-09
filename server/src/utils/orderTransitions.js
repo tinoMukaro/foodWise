@@ -1,7 +1,7 @@
 export const ORDER_TRANSITIONS = {
-  pending: ["confirmed", "cancelled"],
-  confirmed: ["ready", "cancelled"],
-  ready: ["collected", "cancelled"],
+  pending: ['confirmed', 'cancelled'],
+  confirmed: ['ready', 'cancelled'],
+  ready: ['collected', 'cancelled'],
   collected: [],
   cancelled: [],
 };

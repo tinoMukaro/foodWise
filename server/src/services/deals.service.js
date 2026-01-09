@@ -1,9 +1,9 @@
-import { db } from "../config/database.js";
-import { deals } from "../models/deals.model.js";
-import { business } from "../models/business.model.js";
-import { eq, and, desc, gte, sql } from "drizzle-orm";
+import { db } from '../config/database.js';
+import { deals } from '../models/deals.model.js';
+import { business } from '../models/business.model.js';
+import { eq, and, desc, gte, sql } from 'drizzle-orm';
 
-export const createDeal = async (dealData) => {
+export const createDeal = async dealData => {
   try {
     const [newDeal] = await db
       .insert(deals)
@@ -18,7 +18,7 @@ export const createDeal = async (dealData) => {
         expiresAt: dealData.expiresAt,
         pickupLocation: dealData.pickupLocation,
         imageUrl: dealData.imageUrl,
-        status: "active",
+        status: 'active',
       })
       .returning({
         id: deals.id,
@@ -36,10 +36,10 @@ export const createDeal = async (dealData) => {
         createdAt: deals.createdAt,
       });
 
-    console.log("Deal successfully created");
+    console.log('Deal successfully created');
     return newDeal;
   } catch (error) {
-    console.error("Failed to create deal:", error);
+    console.error('Failed to create deal:', error);
     throw error;
   }
 };
@@ -51,23 +51,17 @@ export const decreaseDealQuantity = async (dealId, quantity) => {
       quantityLeft: sql`${deals.quantityLeft} - ${quantity}`,
       updatedAt: new Date(),
     })
-    .where(
-      and(
-        eq(deals.id, dealId),
-        gte(deals.quantityLeft, quantity)
-      )
-    )
+    .where(and(eq(deals.id, dealId), gte(deals.quantityLeft, quantity)))
     .returning();
 
   if (!updatedDeal) {
-    throw new Error("Not enough deal quantity available");
+    throw new Error('Not enough deal quantity available');
   }
 
   return updatedDeal;
 };
 
-
-export const getDealsByBusiness = async (businessId) => {
+export const getDealsByBusiness = async businessId => {
   try {
     const businessDeals = await db
       .select({
@@ -91,21 +85,16 @@ export const getDealsByBusiness = async (businessId) => {
 
     return businessDeals;
   } catch (error) {
-    console.error("Failed to fetch business deals:", error);
+    console.error('Failed to fetch business deals:', error);
     throw error;
   }
 };
 
-
-export const getDealById = async (id) => {
-  const [deal] = await db
-    .select()
-    .from(deals)
-    .where(eq(deals.id, id));
+export const getDealById = async id => {
+  const [deal] = await db.select().from(deals).where(eq(deals.id, id));
 
   return deal ?? null;
 };
-
 
 export const updateDeal = async (id, businessId, updateData) => {
   try {
@@ -113,17 +102,12 @@ export const updateDeal = async (id, businessId, updateData) => {
     const [existingDeal] = await db
       .select()
       .from(deals)
-      .where(
-        and(
-          eq(deals.id, id),
-          eq(deals.businessId, businessId)
-        )
-      );
-    
+      .where(and(eq(deals.id, id), eq(deals.businessId, businessId)));
+
     if (!existingDeal) {
-      throw new Error("Deal not found or unauthorized");
+      throw new Error('Deal not found or unauthorized');
     }
-    
+
     const [updatedDeal] = await db
       .update(deals)
       .set({
@@ -146,7 +130,7 @@ export const updateDeal = async (id, businessId, updateData) => {
         status: deals.status,
         updatedAt: deals.updatedAt,
       });
-    
+
     console.log(`Deal ${id} successfully updated`);
     return updatedDeal;
   } catch (error) {
@@ -161,22 +145,17 @@ export const deleteDeal = async (id, businessId) => {
     const [existingDeal] = await db
       .select()
       .from(deals)
-      .where(
-        and(
-          eq(deals.id, id),
-          eq(deals.businessId, businessId)
-        )
-      );
-    
+      .where(and(eq(deals.id, id), eq(deals.businessId, businessId)));
+
     if (!existingDeal) {
-      throw new Error("Deal not found or unauthorized");
+      throw new Error('Deal not found or unauthorized');
     }
-    
+
     // Soft delete by updating status
     const [deletedDeal] = await db
       .update(deals)
       .set({
-        status: "deleted",
+        status: 'deleted',
         updatedAt: new Date(),
       })
       .where(eq(deals.id, id))
@@ -184,22 +163,20 @@ export const deleteDeal = async (id, businessId) => {
         id: deals.id,
         status: deals.status,
       });
-    
+
     console.log(`Deal ${id} successfully deleted`);
     return deletedDeal;
-    
+
     // OR for hard delete:
     // const [deletedDeal] = await db
     //   .delete(deals)
     //   .where(eq(deals.id, id))
     //   .returning({ id: deals.id });
-    
   } catch (error) {
     console.error(`Failed to delete deal ${id}:`, error);
     throw error;
   }
 };
-
 
 export const getAllActiveDeals = async () => {
   try {
@@ -227,7 +204,7 @@ export const getAllActiveDeals = async () => {
 
     return activeDeals;
   } catch (error) {
-    console.error("Failed to fetch active deals:", error);
+    console.error('Failed to fetch active deals:', error);
     throw error;
   }
 };

@@ -1,9 +1,7 @@
 import { business } from '../models/business.model.js';
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
-import {db }  from '../config/database.js';
-import { types } from '@neondatabase/serverless';
-
+import { db } from '../config/database.js';
 
 export const hashPassword = async password => {
   try {
@@ -23,8 +21,18 @@ export const comparePassword = async (password, hashedPassword) => {
   }
 };
 
-export const createBusiness = async({ name, type, email, password, phone, phone2, location, openingHours, description })=>{
-      try {
+export const createBusiness = async ({
+  name,
+  type,
+  email,
+  password,
+  phone,
+  phone2,
+  location,
+  openingHours,
+  description,
+}) => {
+  try {
     const existingBus = await db
       .select()
       .from(business)
@@ -35,19 +43,18 @@ export const createBusiness = async({ name, type, email, password, phone, phone2
       throw new Error('Business with this email already exists');
     const password_hash = await hashPassword(password);
 
-    
     const [newBusiness] = await db
       .insert(business)
-      .values({ 
+      .values({
         name,
-        type, 
-        email, 
-        password: password_hash, 
+        type,
+        email,
+        password: password_hash,
         phone,
         phone2,
         location,
         openingHours,
-        description
+        description,
       })
       .returning({
         id: business.id,
@@ -59,21 +66,18 @@ export const createBusiness = async({ name, type, email, password, phone, phone2
         location: business.location,
         openingHours: business.openingHours,
         description: business.description,
-        createdAt: business.createdAt,  
-        updatedAt: business.updatedAt   
+        createdAt: business.createdAt,
+        updatedAt: business.updatedAt,
       });
 
     console.log(`Business ${newBusiness.email} created successfully`);
 
     return newBusiness;
-    
   } catch (e) {
     console.error(`Error creating the Business: ${e}`);
     throw e;
   }
-
-}
-
+};
 
 export const authenticateBusiness = async ({ email, password }) => {
   try {
