@@ -1,0 +1,18 @@
+{
+  "name": "Sweet Crust Bakery",
+  "email": "orders@sweetcrustbakery.com",
+  "password": "B@kery2024!",
+  "phone": "+1-555-123-4567",
+  "phone2": "+1-555-987-6543",
+  "location": "123 Baker Street, Breadville, BC 12345",
+  "openingHours": "Monday-Friday: 6:00 AM - 8:00 PM, Saturday: 7:00 AM - 9:00 PM, Sunday: 7:00 AM - 6:00 PM",
+  "description": "A family-owned bakery specializing in artisan breads, French pastries, and custom cakes. Using traditional recipes with a modern twist, we source local ingredients for the freshest baked goods. Voted Best Bakery in Breadville three years running!"
+}
+
+{
+     "name" : "tinashe Nyambayo",
+     "email" : "vanyambayo@gmail.com",
+     "password" : "2015ire",
+     "role" : "user"
+     
+}
