@@ -47,4 +47,4 @@ Backend API: http://localhost:5000
 
 👨‍💻 Author
 
-## Tino Mukaro
+## Tino Mukaro (github.com/tinoMukaro)
