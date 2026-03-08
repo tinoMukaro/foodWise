@@ -51,7 +51,7 @@ const Homepage = () => {
                     <div className="relative w-full max-w-lg">
                         <div className="w-full h-96 bg-gradient-to-r from-[#FF9800]/20 to-[#2E7D32]/20 rounded-3xl shadow-2xl overflow-hidden">
                             <img 
-                                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                                src="https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/002/028/564/datas/medium.png" 
                                 alt="A basket filled with fresh bread, pastries, and fruits from a local bakery"
                                 className="w-full h-full object-cover"
                             />
